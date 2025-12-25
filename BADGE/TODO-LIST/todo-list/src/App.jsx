@@ -34,7 +34,7 @@ function App() {
   return (
     <>
       <button onClick={() => setPage("todos")}>Todo List</button>
-      <button onClick={() => setPage(" ")}>Deleted Todos</button>
+      <button onClick={() => setPage("")}>Deleted Todos</button>
 
       {page === "todos" ? (
         <TodoList
