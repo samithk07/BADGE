@@ -24,7 +24,8 @@ const lights=[
             width:50,
             height:50,
             borderRadius:"50%",
-            marginBottom:5
+            
+          
           }}
             
           />
@@ -34,13 +35,7 @@ const lights=[
         </div>
       </>
       
-      )
-    
-    
-    
-    
-    
-    
+      )   
   }
   export default App
 
