@@ -54,6 +54,7 @@ const TodoPage = ({ todos, setTodos, setDeletedTodos }) => {
       <ul>
         {todos.map((todo) => (
           <li key={todo.id}>
+              
             {todo.text}
             <button onClick={() => editTodo(todo)}>Edit</button>
             <button onClick={() => deleteTodo(todo)}>Delete</button>
@@ -65,3 +66,5 @@ const TodoPage = ({ todos, setTodos, setDeletedTodos }) => {
 };
 
 export default TodoPage;
+
+
