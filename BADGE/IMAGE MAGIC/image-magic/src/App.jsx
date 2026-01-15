@@ -1,4 +1,4 @@
-
+ 
 import InputPage from './InputPage'
 import ResultPage from './ResultPage'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
