@@ -22,8 +22,6 @@ return (
         placeholder='Enter Second number'
         onChange={(a)=>setB(a.target.value)}/>
         <button onClick={handleSubmit}>Show Result</button>
-       
-      
     </div>
   )
 }

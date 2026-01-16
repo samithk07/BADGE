@@ -1,123 +1,101 @@
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import './App.css'
+import React, { useState } from "react";
 
-// function App() {
-//   const [todos, setTodos] = useState([])
-//   const [edit,setEdit]=useState(null)
-//   const [text,setText]=useState("")
+export default function App() {
+  const [text, setText] = useState("");
+  const [list, setList] = useState([]);
+  const [deletedItems, setDeletedItems] = useState([]);
+  const [edit, setEdit] = useState(null);
+  const [newText, setNewText] = useState("");
 
-//   const handleAdd=()=>{
-//     if(text.trim()==="")return
+  const handleAdd = () => {
+    if (text.trim() === "") return;
 
-//     if(edit !== null){
-//       setTodos(
-//         todos.map((a)=>
-//           a.id === edit ? {...a,text}:a
-//         ))
-//         setEdit(null)
-//     }else{
-//       setTodos([...todos,{id:Date.now(),text}])
-//     }
-//     setText("")
-//   }
-//   const handleEdit=(a)=>{
-//     setText(a.text)
-//     setEdit(a.id)
-//   }
+    setList((prev) => [...prev, { id: Date.now(), text }]);
+    setText("");
+  };
 
-//   const handleDelete=(id)=>{
-//     setTodos(todos.filter((b)=>b.id!==id))
-//   }
+  const handleDelete = (id) => {
+    const deletedItem = list.find((val) => val.id === id);
+    if (deletedItem) {
+      setDeletedItems((prev) => [...prev, deletedItem]);
+    }
 
-//   return ( 
-//     <>
-//     <h2> Todo List</h2>
-//     <input 
-//     type='text'
-//     value={text}
-//     placeholder='Enter a Task'
-//     onChange={(e)=>setText(e.target.value)}    
-//     />
-//     <button onClick={handleAdd}>{edit !==null?"UPDATE":"ADD"}</button>
+    setList(list.filter((val) => val.id !== id));
+  };
 
-//     <ul>
-//       {todos.map((a)=>(
-//         <li key={a.id}>{a.text}
-//         <button onClick={()=>handleEdit(a)}>Edit</button>
-//         <button onClick={()=>handleDelete(a.id)}>Delete</button>
-        
-//         </li>
-       
-//       ))}
-//     </ul>
-     
-//     </>
-//   )
-// }
+  const handleEdit = (id) => {
+    if (newText.trim() === "") return;
 
-// export default App
+    const updatedList = list.map((item) =>
+      item.id === id ? { ...item, text: newText } : item
+    );
 
+    setList(updatedList);
+    setEdit(null);
+    setNewText("");
+  };
 
+  const handleUndo = (id) => {
+    const undoItem = deletedItems.find((val) => val.id === id);
+    if (undoItem) {
+      setList((prev) => [...prev, undoItem]);
+    }
 
+    setDeletedItems(deletedItems.filter((val) => val.id !== id));
+  };
 
+  return (
+    <>
+      <h3>Todo App</h3>
 
-// import React, { useState } from 'react'
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      <button onClick={handleAdd}>ADD</button>
 
-// const App = () => {
-//   const [todos,setTodos]=useState([])
-//   const [text,setText]=useState("")
-//   const [editId,setEditId]=useState(false)
+      <ul>
+        {list.map((item) => (
+          <li key={item.id}>
+            {edit === item.id ? (
+              <>
+                <input
+                  type="text"
+                  value={newText}
+                  onChange={(e) => setNewText(e.target.value)}
+                />
+                <button onClick={() => handleEdit(item.id)}>Save</button>
+                <button onClick={() => setEdit(null)}>Cancel</button>
+              </>
+            ) : (
+              <>
+                <span>{item.text}</span>
+                <button
+                  onClick={() => {
+                    setEdit(item.id);
+                    setNewText(item.text);
+                  }}
+                >
+                  Edit
+                </button>
+                <button onClick={() => handleDelete(item.id)}>Delete</button>
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
 
-//   const handleAdd=()=>{
-//     if(text.trim()==="")return
-//     if(editId !== null){
-//       setTodos(
-//         todos.map((a)=>
-//           a.id===editId ? {...a,text}:a
-//         ))
-//         setEditId(null)
-//     }else{
-//       setTodos([...todos,{id:Date.now(),text}])
-//     }
-//     setText("")
-//   }
-//   const handleEdit=(a)=>{
-//     setText(a.text)
-//     setEditId(a.id)
-//   }
-//   const handleDelete=(id)=>{
-//     setTodos(todos.filter((b)=>b.id!==id))
-//   }
-//   return (
-//     <div>
-      
-//       <h1>Todo List</h1>
-//       <input type="text"
-//       value={text}
-//       placeholder='enter today task' 
-//       onChange={(e)=>setText(e.target.value)}/>
-//       <button onClick={handleAdd}>{editId !==null ?"UPDATE":"ADD"}</button>
-//       <ul>
-//         {todos.map((a)=>(
-//           <li key={a.id}>{a.text}
-//           <button onClick={()=>handleEdit(a)}>Edit</button>
-//           <button onClick={()=>handleDelete(a.id)}>Delete</button>
+      <h3>Deleted Items</h3>
 
-          
-          
-//           </li>
-//         ))}
-//         </ul>      
-//     </div>
-//   )
-// }
-
-// export default App
-
-
-
-
-
-
+      <ul>
+        {deletedItems.map((item) => (
+          <li key={item.id}>
+            {item.text}
+            <button onClick={() => handleUndo(item.id)}>Undo</button>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
